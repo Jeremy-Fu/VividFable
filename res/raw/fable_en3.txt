@@ -1,0 +1,11 @@
+title:The Honest Citizen
+language:en
+type:TEXT
+content:
+   A POLITICAL Preferment, labelled with its price, was canvassing the 
+State to find a purchaser.  One day it offered itself to a Truly 
+Good Man, who, after examining the label and finding the price was 
+exactly twice as great as he was willing to pay, spurned the 
+Political Preferment from his door.  Then the People said: "Behold, 
+this is an honest citizen!"  And the Truly Good Man humbly 
+confessed that it was so.

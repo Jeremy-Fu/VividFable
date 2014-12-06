@@ -76,7 +76,11 @@ public final class R {
     }
     public static final class raw {
         public static final int fable_en1=0x7f050000;
-        public static final int gestures=0x7f050001;
+        public static final int fable_en2=0x7f050001;
+        public static final int fable_en3=0x7f050002;
+        public static final int fable_en4=0x7f050003;
+        public static final int fable_en5=0x7f050004;
+        public static final int gestures=0x7f050005;
     }
     public static final class string {
         public static final int action_search=0x7f070001;

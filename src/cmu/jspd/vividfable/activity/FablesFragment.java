@@ -12,6 +12,7 @@ import android.widget.GridView;
 import cmu.jspd.vividfable.adapter.FableIconAdapter;
 import cmu.jspd.vividfable.datamodel.Fable;
 import cmu.jspd.vividfable.datamodel.Fable.FableType;
+import cmu.jspd.vividfable.datamodel.FableDataManager;
 
 public class FablesFragment extends Fragment {
 
@@ -81,6 +82,7 @@ public class FablesFragment extends Fragment {
 			intent.putExtra(TextFableActivity.FABLE_ID, fable.getId());
 			
 		}
+		FableDataManager.getInstance(getActivity()).updateFableOpenTime(fable.getId());
 		startActivity(intent);
 	}
 }

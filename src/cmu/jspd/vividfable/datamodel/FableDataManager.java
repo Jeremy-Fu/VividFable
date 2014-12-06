@@ -2,6 +2,7 @@ package cmu.jspd.vividfable.datamodel;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import android.content.ContentValues;
@@ -96,11 +97,6 @@ public class FableDataManager {
 		Log.d(TAG, String.format("Insert fable (title:%s) with id: %d", f.getTitle(), id));
 		return getFullFable(id);
 	}
-
-//	public int updateFableStats(Fable f) {
-//		return database.update(FableDBHelper.FABLES_TABLE_NAME,
-//				f.getStatsContentValues(), "id = " + f.getId(), null);
-//	}
 	
 	public Fable updateFableRating(long fableId, int newRating) {
 		
@@ -114,6 +110,23 @@ public class FableDataManager {
 			return getFullFable(fableId);
 		} else {
 			return null;
+		}
+		
+	}
+	
+	public Fable updateFableOpenTime(long fableId) {
+		
+		ContentValues values = new ContentValues();
+		
+		
+		values.put(FableDBHelper.COLUMN_CREATE_AT, new Date().getTime());
+		
+		int affectedRows = database.update(FableDBHelper.FABLES_TABLE_NAME, values, String.format("%s = %d", FableDBHelper.COLUMN_ID, fableId), null);
+		
+		if (affectedRows == 1) {
+			return getFullFable(fableId);
+		} else {
+			throw new RuntimeException("Unable to find the fable id = " + fableId);
 		}
 		
 	}
@@ -232,11 +245,20 @@ public class FableDataManager {
 		Log.i(TAG, "populateDB");
 		try {
 			fable = Utility.parseRawFableFile(context, cmu.jspd.vividfable.activity.R.raw.fable_en1);
+			saveFullFable(fable);
+			fable = Utility.parseRawFableFile(context, cmu.jspd.vividfable.activity.R.raw.fable_en2);
+			saveFullFable(fable);
+			fable = Utility.parseRawFableFile(context, cmu.jspd.vividfable.activity.R.raw.fable_en3);
+			saveFullFable(fable);
+			fable = Utility.parseRawFableFile(context, cmu.jspd.vividfable.activity.R.raw.fable_en4);
+			saveFullFable(fable);
+			fable = Utility.parseRawFableFile(context, cmu.jspd.vividfable.activity.R.raw.fable_en5);
+			saveFullFable(fable);
 		} catch (IOException e) {
 			Log.e(TAG, e.toString());
 			return;
 		}
-		saveFullFable(fable);
+		return;
 	}
 
 }
