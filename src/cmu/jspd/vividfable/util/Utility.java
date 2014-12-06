@@ -67,7 +67,7 @@ public class Utility {
 		}
 		
 
-		return new Fable(title, language, type, sb.toString());
+		return new Fable(Long.MAX_VALUE, title, language, type, sb.toString());
 	}
 
 }

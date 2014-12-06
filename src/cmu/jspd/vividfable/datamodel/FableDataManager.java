@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
@@ -64,28 +65,59 @@ public class FableDataManager {
 //		return null;
 //	}
 
-	public Fable getFullFableDetails(Long id) {
+	public Fable getFullFable(long id) {
 		Cursor c = database.query(FableDBHelper.FABLES_TABLE_NAME,
-				FableDBHelper.ALL_FIELDS, "id = " + id, new String[] {}, null,
+				FableDBHelper.ALL_FIELDS, String.format("%s = %d", FableDBHelper.COLUMN_ID, id), new String[] {}, null,
 				null, null);
 		if (c.moveToFirst()) {
-			return new Fable();
+			long retrivedId = c.getLong(0);
+			String title = c.getString(1);
+			String language = c.getString(2);
+			FableType type = Utility.convertFableType(c.getString(3));
+			String content = c.getString(4);
+			int rating = c.getInt(6);
+			
+			if (id != retrivedId) {
+				throw new RuntimeException(String.format("Try to retrieve id = %d. Obtain id = %d", id, retrivedId));
+			}
+			
+			Fable retrivedFable = new Fable(id, title, language, type, content);
+			retrivedFable.setRating(rating);
+			return retrivedFable;
+			
 		}
 		c.close();
-		Log.i(TAG, "Nothing!!!");
 		return null;
 	}
 
 	public Fable saveFullFable(Fable f) {
-		Long id = database.insert(FableDBHelper.FABLES_TABLE_NAME, null,
+		long id = database.insert(FableDBHelper.FABLES_TABLE_NAME, null,
 				f.getFullContentValues());
-		return getFullFableDetails(id);
+		Log.d(TAG, String.format("Insert fable (title:%s) with id: %d", f.getTitle(), id));
+		return getFullFable(id);
 	}
 
 //	public int updateFableStats(Fable f) {
 //		return database.update(FableDBHelper.FABLES_TABLE_NAME,
 //				f.getStatsContentValues(), "id = " + f.getId(), null);
 //	}
+	
+	public Fable updateFableRating(long fableId, int newRating) {
+		
+		ContentValues values = new ContentValues();
+		
+		values.put(FableDBHelper.COLUMN_RATING, newRating);
+		
+		int affectedRows = database.update(FableDBHelper.FABLES_TABLE_NAME, values, String.format("%s = %d", FableDBHelper.COLUMN_ID, fableId), null);
+		
+		if (affectedRows == 1) {
+			return getFullFable(fableId);
+		} else {
+			return null;
+		}
+		
+	}
+	
 
 	public int countFables() {
 		Cursor cursor = database.rawQuery("SELECT  * FROM "
@@ -100,6 +132,7 @@ public class FableDataManager {
 		List<Fable> ret = new ArrayList<Fable>();
 		
 		String[] gridViewFields = {
+			FableDBHelper.COLUMN_ID,
 			FableDBHelper.COLUMN_TITLE,
 			FableDBHelper.COLUMN_TYPE,
 			FableDBHelper.COLUMN_CONTENT
@@ -115,10 +148,11 @@ public class FableDataManager {
 		int counter = 0;
 		while (!cursor.isAfterLast()) {
 			
-			FableType type = Utility.convertFableType(cursor.getString(1));
-			String title = cursor.getString(0);
-			String content = cursor.getString(2);
-			Fable fable = new Fable(title, lang, type, content);
+			long id = cursor.getLong(0);
+			String title = cursor.getString(1);
+			FableType type = Utility.convertFableType(cursor.getString(2));
+			String content = cursor.getString(3);
+			Fable fable = new Fable(id, title, lang, type, content);
 			ret.add(fable);
 			cursor.moveToNext();
 			counter++;
@@ -133,6 +167,7 @@ public class FableDataManager {
 		List<Fable> ret = new ArrayList<Fable>();
 		
 		String[] gridViewFields = {
+				FableDBHelper.COLUMN_ID,
 				FableDBHelper.COLUMN_TITLE,
 				FableDBHelper.COLUMN_TYPE,
 				FableDBHelper.COLUMN_CONTENT
@@ -148,10 +183,11 @@ public class FableDataManager {
 		
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
-			FableType type = Utility.convertFableType(cursor.getString(1));
-			String title = cursor.getString(0);
-			String content = cursor.getString(2);
-			Fable fable = new Fable(title, lang, type, content);
+			long id = cursor.getLong(0);
+			FableType type = Utility.convertFableType(cursor.getString(2));
+			String title = cursor.getString(1);
+			String content = cursor.getString(3);
+			Fable fable = new Fable(id, title, lang, type, content);
 			ret.add(fable);
 			cursor.moveToNext();
 		}

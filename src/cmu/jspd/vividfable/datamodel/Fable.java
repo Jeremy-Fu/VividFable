@@ -9,22 +9,24 @@ public class Fable {
 	private static final FableType DAFUALT_TYPE = FableType.TEXT;
 	private static final String DEFAULT_CONTENT = "story strats from here.";
 	
+	private final long id;
 	private final String title;
 	private final String language;
 	private final FableType type;
 	private final String content;
 	private int rating = 0;
 
-	public Fable() {
-		this(DEFAULT_TITLE, DEFAULT_LANGUAGE, DAFUALT_TYPE, DEFAULT_CONTENT);
+	public Fable(long id) {
+		this(id, DEFAULT_TITLE, DEFAULT_LANGUAGE, DAFUALT_TYPE, DEFAULT_CONTENT);
 	}
 	
-	public Fable(String title, String language, FableType type) {
-		this(title, language, type, DEFAULT_CONTENT);
+	public Fable(long id, String title, String language, FableType type) {
+		this(id, title, language, type, DEFAULT_CONTENT);
 	}
 	
-	public Fable(String title, String language, FableType type, String content) {
+	public Fable(long id, String title, String language, FableType type, String content) {
 		super();
+		this.id = id;
 		this.title = title;
 		this.language = language;
 		this.type = type;
@@ -32,9 +34,13 @@ public class Fable {
 	}
 	
 	public Fable(Fable fable) {
-		this(fable.title, fable.language, fable.type, fable.content);
+		this(fable.id, fable.title, fable.language, fable.type, fable.content);
 	}
 
+	public long getId() {
+		return id;
+	}
+	
 	public String getTitle() {
 		return title;
 	}
@@ -73,6 +79,7 @@ public class Fable {
 		
 		ContentValues values = new ContentValues();
 		
+		
 		values.put(FableDBHelper.COLUMN_TITLE, title);
 		values.put(FableDBHelper.COLUMN_LANGUAGE, language);
 		values.put(FableDBHelper.COLUMN_TYPE, type.toString());
@@ -81,6 +88,20 @@ public class Fable {
 		
 		return values;
 	}
+	
+//	public ContentValues getStatsContentValues() {
+//		
+//		ContentValues values = new ContentValues();
+//		
+//		values.put(FableDBHelper.COLUMN_TITLE, title);
+//		values.put(FableDBHelper.COLUMN_LANGUAGE, language);
+//		values.put(FableDBHelper.COLUMN_TYPE, type.toString());
+//		values.put(FableDBHelper.COLUMN_CONTENT, content);
+//		values.put(FableDBHelper.COLUMN_RATING, rating);
+//		
+//		return values;
+//	}
+
 	
 	
 

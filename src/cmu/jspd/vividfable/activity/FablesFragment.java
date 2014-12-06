@@ -37,16 +37,7 @@ public class FablesFragment extends Fragment {
 					int position, long id) {
 				
 				Fable fable = (Fable) parent.getItemAtPosition(position);
-
-				Intent intent = null;
-				if (fable.getType() == FableType.TEXT) {
-					intent = new Intent(getActivity(), TextFableActivity.class);
-					intent.putExtra(TextFableActivity.LOCAL_FABLE, true);
-					intent.putExtra(TextFableActivity.FABLE_TITLE, fable.getTitle());
-					intent.putExtra(TextFableActivity.FABLE_CONTENT, fable.getContent());
-					
-				}
-				startActivity(intent);
+				openFable(fable);
 			}
 		});
 
@@ -59,14 +50,7 @@ public class FablesFragment extends Fragment {
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 				Fable fable = (Fable) parent.getItemAtPosition(position);
-				Intent intent = null;
-				if (fable.getType() == FableType.TEXT) {
-					intent = new Intent(getActivity(), TextFableActivity.class);
-					intent.putExtra(TextFableActivity.LOCAL_FABLE, true);
-					intent.putExtra(TextFableActivity.FABLE_CONTENT, fable.getContent());
-					intent.putExtra(TextFableActivity.FABLE_TITLE, fable.getTitle());
-				}
-				startActivity(intent);
+				openFable(fable);
 			}
 		});
 		return rootView;
@@ -85,5 +69,18 @@ public class FablesFragment extends Fragment {
 				FableIconAdapter.LIST_FABLES_FAVORITE, R.layout.grid_single));
 		
 		
+	}
+	
+	private void openFable(Fable fable) {
+		Intent intent = null;
+		if (fable.getType() == FableType.TEXT) {
+			intent = new Intent(getActivity(), TextFableActivity.class);
+			intent.putExtra(TextFableActivity.LOCAL_FABLE, true);
+			intent.putExtra(TextFableActivity.FABLE_TITLE, fable.getTitle());
+			intent.putExtra(TextFableActivity.FABLE_CONTENT, fable.getContent());
+			intent.putExtra(TextFableActivity.FABLE_ID, fable.getId());
+			
+		}
+		startActivity(intent);
 	}
 }

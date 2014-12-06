@@ -24,23 +24,27 @@ public class TextFableActivity extends Activity {
 	
 	private static final int RATING_REQUEST_CODE = 1;
 	
+	public static final String FABLE_ID = "FABLE_ID";
 	public static final String FABLE_LINK = "FABLE_LINK";
 	public static final String FABLE_TITLE = "FABLE_TITLE";
 	public static final String LOCAL_FABLE = "LOCAL_FABLE";
 	public static final String FABLE_CONTENT = "FABLE_CONTENT";
 
 	public static final String ACTION_FETCH_LINK = "ACTION_FETCH_LINK";
-
+	
 	private TextToSpeech tts;
 	private TextView titleView;
 	private TextView textView;
 	private RatingBar fableRatingBar;
 	private Button keepBtn;
+	
+	private long fableId = Long.MAX_VALUE;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		
 		super.onCreate(savedInstanceState);
+		
 		getActionBar().setTitle(R.string.app_name);
 		getActionBar().setIcon(R.drawable.ic_launcher);
 		getActionBar().show();
@@ -56,14 +60,20 @@ public class TextFableActivity extends Activity {
 		keepBtn.setOnClickListener(new OnClickListener() {
 
 			@Override
-			public void onClick(View arg0) {
+			public void onClick(View keepBtnView) {
 				FableType type = FableType.TEXT;
 				String content = (String) textView.getText();
 				String title = (String) titleView.getText();
 				
 				Locale locale = getResources().getConfiguration().locale;
-				Fable fable = new Fable(title, locale.getLanguage(), type, content);
-				FableDataManager.getInstance(getBaseContext()).saveFullFable(fable);
+				Fable fable = new Fable(Long.MAX_VALUE, title, locale.getLanguage(), type, content);
+				Fable savedFable = FableDataManager.getInstance(getBaseContext()).saveFullFable(fable);
+				if (savedFable.getId() != -1L) {
+					Toast.makeText(TextFableActivity.this, "Saved the fable id = " + savedFable.getId(), Toast.LENGTH_SHORT).show();
+					fableId = savedFable.getId();
+					keepBtnView.setEnabled(false);
+				}
+				
 			}
 			
 		});
@@ -117,6 +127,9 @@ public class TextFableActivity extends Activity {
 			textView.setText(intent.getStringExtra(FABLE_CONTENT));
 			keepBtn.setEnabled(false);
 			
+			fableId = intent.getLongExtra(FABLE_ID, Long.MAX_VALUE);
+			
+			
 		}
 	}
 
@@ -134,7 +147,21 @@ public class TextFableActivity extends Activity {
 		super.onActivityResult(requestCode, resultCode, data);
 		if (requestCode == RATING_REQUEST_CODE) {
 			if (resultCode == Activity.RESULT_OK) {
-				Toast.makeText(this, "Rate " + data.getIntExtra(RatingDialog.RATING_RESULT, -1), Toast.LENGTH_SHORT).show();
+				if (fableId == Long.MAX_VALUE) {
+					Toast.makeText(this, "Failed to rate. Keep it first.", Toast.LENGTH_SHORT).show();
+					return;
+				}
+				
+				Fable updatedFable = FableDataManager.getInstance(getApplicationContext()).updateFableRating(fableId, data.getIntExtra(RatingDialog.RATING_RESULT, -1));
+				
+				
+				if (updatedFable != null &&
+						updatedFable.getRating() == data.getIntExtra(RatingDialog.RATING_RESULT, -1)) {
+					Toast.makeText(this, "Successfully rate " + data.getIntExtra(RatingDialog.RATING_RESULT, -1), Toast.LENGTH_SHORT).show();
+				} else {
+					Toast.makeText(this, "Failed to rate.", Toast.LENGTH_SHORT).show();
+				}
+				
 			}
 		}
 	}

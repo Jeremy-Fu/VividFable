@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import cmu.jspd.vividfable.activity.R;
@@ -29,6 +28,7 @@ public class FableIconAdapter extends BaseAdapter {
 		mContext = c;
 		this.resource = resource;
 		switch (listType) {
+		
 		case LIST_FABLES_RECENT: {
 			fables = FableDataManager.getInstance(mContext)
 					.listRecentFablesForAdapter(lang);
