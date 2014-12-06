@@ -42,24 +42,25 @@ public final class R {
         public static final int video=0x7f02000d;
     }
     public static final class id {
-        public static final int action_search=0x7f0b0011;
+        public static final int action_search=0x7f0b0012;
         public static final int dashboard=0x7f0b0000;
-        public static final int fableTitle=0x7f0b000d;
+        public static final int fableTitle=0x7f0b000e;
         public static final int favoriteFables=0x7f0b0002;
-        public static final int footer=0x7f0b0008;
+        public static final int footer=0x7f0b0009;
         public static final int grid_image=0x7f0b0003;
         public static final int grid_text=0x7f0b0004;
-        public static final int header=0x7f0b000c;
-        public static final int keepBtn=0x7f0b0009;
-        public static final int rateBtn=0x7f0b000b;
+        public static final int header=0x7f0b000d;
+        public static final int keepBtn=0x7f0b000a;
+        public static final int rateBtn=0x7f0b000c;
         public static final int rateImage=0x7f0b0006;
+        public static final int rate_confirm=0x7f0b0007;
         public static final int rate_title=0x7f0b0005;
-        public static final int ratingBar=0x7f0b000e;
+        public static final int ratingBar=0x7f0b000f;
         public static final int recentFables=0x7f0b0001;
-        public static final int search_label=0x7f0b0007;
-        public static final int shareBtn=0x7f0b000a;
-        public static final int textFableView=0x7f0b0010;
-        public static final int textFableWindow=0x7f0b000f;
+        public static final int search_label=0x7f0b0008;
+        public static final int shareBtn=0x7f0b000b;
+        public static final int textFableView=0x7f0b0011;
+        public static final int textFableWindow=0x7f0b0010;
     }
     public static final class layout {
         public static final int activity_dashboard=0x7f030000;
@@ -80,6 +81,8 @@ public final class R {
     public static final class string {
         public static final int action_search=0x7f070001;
         public static final int app_name=0x7f070000;
+        public static final int confirm=0x7f070004;
+        public static final int like_it=0x7f070003;
         public static final int search_hint=0x7f070002;
     }
     public static final class style {

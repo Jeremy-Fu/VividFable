@@ -3,13 +3,14 @@ package cmu.jspd.vividfable.adapter;
 import java.util.List;
 
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.TextView;
 import cmu.jspd.vividfable.activity.R;
-import cmu.jspd.vividfable.activity.R.drawable;
 import cmu.jspd.vividfable.datamodel.Fable;
 import cmu.jspd.vividfable.datamodel.Fable.FableType;
 import cmu.jspd.vividfable.datamodel.FableDataManager;
@@ -22,9 +23,11 @@ public class FableIconAdapter extends BaseAdapter {
 
 	private Context mContext;
 	private List<Fable> fables;
+	private int resource;
 
-	public FableIconAdapter(Context c, String lang, int listType) {
+	public FableIconAdapter(Context c, String lang, int listType, int resource) {
 		mContext = c;
+		this.resource = resource;
 		switch (listType) {
 		case LIST_FABLES_RECENT: {
 			fables = FableDataManager.getInstance(mContext)
@@ -57,21 +60,29 @@ public class FableIconAdapter extends BaseAdapter {
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent) {
-		ImageView imageView;
+		
 		if (convertView == null) {
-			imageView = new ImageView(mContext);
-			imageView.setLayoutParams(new GridView.LayoutParams(85, 85));
-			imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-			imageView.setPadding(8, 8, 8, 8);
-		} else {
-			imageView = (ImageView) convertView;
+		
+			LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			convertView = inflater.inflate(resource, parent, false);
 		}
-		if (fables.get(position).getType() == FableType.TEXT) {
+		
+		ImageView imageView = (ImageView)convertView.findViewById(R.id.grid_image);
+//		imageView.setLayoutParams(new GridView.LayoutParams(85, 85));
+		imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+		imageView.setPadding(8, 8, 8, 8);
+		
+		TextView textView = (TextView)convertView.findViewById(R.id.grid_text);
+		
+		Fable fable = fables.get(position);
+		if (fable.getType() == FableType.TEXT) {
 			imageView.setImageResource(R.drawable.text);
 		} else {
 			imageView.setImageResource(R.drawable.video);
 		}
-		return imageView;
+		textView.setText(fable.getTitle());
+		
+		return convertView;
 	}
 
 }

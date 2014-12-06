@@ -12,6 +12,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 import cmu.jspd.vividfable.asynctask.FetchFableTask;
 import cmu.jspd.vividfable.datamodel.Fable;
 import cmu.jspd.vividfable.datamodel.Fable.FableType;
@@ -20,6 +21,8 @@ import cmu.jspd.vividfable.datamodel.FableDataManager;
 public class TextFableActivity extends Activity {
 
 	private static final String TAG = "TextFableActivity";
+	
+	private static final int RATING_REQUEST_CODE = 1;
 	
 	public static final String FABLE_LINK = "FABLE_LINK";
 	public static final String FABLE_TITLE = "FABLE_TITLE";
@@ -73,7 +76,7 @@ public class TextFableActivity extends Activity {
 				Intent intent = new Intent(TextFableActivity.this,
 						RatingDialog.class);
 				intent.putExtra(RatingDialog.FABLE_TITLE, titleView.getText());
-				startActivity(intent);
+				TextFableActivity.this.startActivityForResult(intent, RATING_REQUEST_CODE);
 			}
 		});
 		
@@ -124,5 +127,15 @@ public class TextFableActivity extends Activity {
 			tts.shutdown();
 		}
 		super.onDestroy();
+	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data){
+		super.onActivityResult(requestCode, resultCode, data);
+		if (requestCode == RATING_REQUEST_CODE) {
+			if (resultCode == Activity.RESULT_OK) {
+				Toast.makeText(this, "Rate " + data.getIntExtra(RatingDialog.RATING_RESULT, -1), Toast.LENGTH_SHORT).show();
+			}
+		}
 	}
 }

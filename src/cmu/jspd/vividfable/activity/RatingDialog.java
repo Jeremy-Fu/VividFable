@@ -12,13 +12,22 @@ import android.gesture.GestureOverlayView.OnGesturePerformedListener;
 import android.gesture.Prediction;
 import android.os.Bundle;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.ImageView;
 
 public class RatingDialog extends Activity implements
 		OnGesturePerformedListener {
-	private GestureLibrary gestureLib;
-	private ImageView rateView;
+	
+	public static final String RATING_RESULT = "RATING_RESULT";
+	
 	public static final String FABLE_TITLE = "FABLE_TITLE";
+	
+	private GestureLibrary gestureLib;
+	private ImageView rateResultView;
+	private Button confirm_Button;
+	
+	private int rating = 1;
 
 	public void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
@@ -34,7 +43,21 @@ public class RatingDialog extends Activity implements
 			finish();
 		}
 		setContentView(gestureOverlayView);
-		rateView = (ImageView) rating.findViewById(R.id.rateImage);
+		rateResultView = (ImageView) rating.findViewById(R.id.rateImage);
+		confirm_Button = (Button)rating.findViewById(R.id.rate_confirm);
+		confirm_Button.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				Intent result = new Intent();
+				result.putExtra(RATING_RESULT, RatingDialog.this.rating);
+				
+				setResult(Activity.RESULT_OK, result);
+				finish();
+			}
+			
+		});
+		
 	}
 
 	@Override
@@ -50,15 +73,23 @@ public class RatingDialog extends Activity implements
 				}
 			}
 		}
+		
+		rating = 1;
 		if (max > 1.0) {
 			if ("happy".equals(match)) {
-				rateView.setImageResource(R.drawable.happy_512);
+				rateResultView.setImageResource(R.drawable.happy_512);
+				rating = 3;
 			} else if ("none".equals(match)) {
-				rateView.setImageResource(R.drawable.none_512);
+				rateResultView.setImageResource(R.drawable.none_512);
+				rating = 2;
 			} else if ("sad".equals(match)) {
-				rateView.setImageResource(R.drawable.sad_512);
-
+				rateResultView.setImageResource(R.drawable.sad_512);
+				rating = 1;
 			}
 		}
+		
+		
+		
+		
 	}
 }

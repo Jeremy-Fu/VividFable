@@ -17,7 +17,7 @@
             android:id="@+id/rate_title"
             android:layout_width="wrap_content"
             android:layout_height="48dp"
-            android:text="LIKE IT?  "
+            android:text="@string/like_it"
             android:textSize="12pt" >
         </TextView>
 
@@ -39,8 +39,14 @@
 
     <ImageView
         android:id="@+id/rateImage"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:src="@drawable/unknown_512" />
+    
+    <Button
+        android:id="@+id/rate_confirm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/confirm" />
 
 </LinearLayout>

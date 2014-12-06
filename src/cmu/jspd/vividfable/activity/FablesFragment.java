@@ -78,11 +78,11 @@ public class FablesFragment extends Fragment {
 		
 		recentFables.setAdapter(new FableIconAdapter(getActivity(), 
 				getActivity().getResources().getConfiguration().locale.getLanguage(),	//Internationalization 
-				FableIconAdapter.LIST_FABLES_RECENT));
+				FableIconAdapter.LIST_FABLES_RECENT, R.layout.grid_single));
 		
 		favoriteFables.setAdapter(new FableIconAdapter(getActivity(), 
 				getActivity().getResources().getConfiguration().locale.getLanguage(),	//Internationalization
-				FableIconAdapter.LIST_FABLES_FAVORITE));
+				FableIconAdapter.LIST_FABLES_FAVORITE, R.layout.grid_single));
 		
 		
 	}
