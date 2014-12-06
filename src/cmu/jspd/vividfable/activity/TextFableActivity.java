@@ -37,7 +37,6 @@ public class TextFableActivity extends Activity {
 	private TextView textView;
 	private RatingBar fableRatingBar;
 	private Button keepBtn;
-	
 	private long fableId = Long.MAX_VALUE;
 
 	@Override
@@ -78,9 +77,9 @@ public class TextFableActivity extends Activity {
 			
 		});
 		
-		Button rateBtn = (Button) findViewById(R.id.rateBtn);
+		Button ratingBtn = (Button) findViewById(R.id.rateBtn);
 		
-		rateBtn.setOnClickListener(new View.OnClickListener() {
+		ratingBtn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(TextFableActivity.this,
@@ -116,12 +115,13 @@ public class TextFableActivity extends Activity {
 		
 		Intent intent = getIntent();
 		
-		if (ACTION_FETCH_LINK.equals(intent.getAction())) {
+		//Fetch the fable
+		if (ACTION_FETCH_LINK.equals(intent.getAction())) { //Fetch the fable from Internet
 			String link = intent.getStringExtra(FABLE_LINK);
 			String title = intent.getStringExtra(FABLE_TITLE);
 			titleView.setText(title);
-			new FetchFableTask(this, titleView, textView, tts).execute(link);
-		} else {
+			new FetchFableTask(this, titleView, textView, tts, fableRatingBar).execute(link);
+		} else {											//Fetch the fable locally
 
 			titleView.setText(intent.getStringExtra(FABLE_TITLE));
 			textView.setText(intent.getStringExtra(FABLE_CONTENT));
@@ -144,7 +144,9 @@ public class TextFableActivity extends Activity {
 	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data){
+		
 		super.onActivityResult(requestCode, resultCode, data);
+		
 		if (requestCode == RATING_REQUEST_CODE) {
 			if (resultCode == Activity.RESULT_OK) {
 				if (fableId == Long.MAX_VALUE) {
@@ -154,10 +156,12 @@ public class TextFableActivity extends Activity {
 				
 				Fable updatedFable = FableDataManager.getInstance(getApplicationContext()).updateFableRating(fableId, data.getIntExtra(RatingDialog.RATING_RESULT, -1));
 				
-				
 				if (updatedFable != null &&
 						updatedFable.getRating() == data.getIntExtra(RatingDialog.RATING_RESULT, -1)) {
-					Toast.makeText(this, "Successfully rate " + data.getIntExtra(RatingDialog.RATING_RESULT, -1), Toast.LENGTH_SHORT).show();
+					fableRatingBar.setRating(updatedFable.getRating());
+					Toast.makeText(this, "Successfully rate " + 
+						data.getIntExtra(RatingDialog.RATING_RESULT, -1), Toast.LENGTH_SHORT).show();
+					
 				} else {
 					Toast.makeText(this, "Failed to rate.", Toast.LENGTH_SHORT).show();
 				}

@@ -14,6 +14,7 @@ import android.content.DialogInterface.OnClickListener;
 import android.os.AsyncTask;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import cmu.jspd.vividfable.config.Environment;
 
@@ -28,12 +29,14 @@ public class FetchFableTask extends AsyncTask<String, Void, String> {
 	private TextView txtView;
 	private Activity ctxt;
 	private TextToSpeech textToSpeech;
+	private RatingBar ratingBar;
 
-	public FetchFableTask(Activity c, TextView ttl, TextView t, TextToSpeech tts) {
+	public FetchFableTask(Activity c, TextView ttl, TextView t, TextToSpeech tts, RatingBar rating) {
 		ctxt = c;
 		titleView = ttl;
 		txtView = t;
 		textToSpeech = tts;
+		ratingBar = rating;
 	}
 
 	@Override
@@ -99,6 +102,7 @@ public class FetchFableTask extends AsyncTask<String, Void, String> {
 		} else {
 			showZhFable(result);
 		}
+		ratingBar.setRating(0);
 	}
 	
 	private void showEnFable(String result) {
