@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Vivid Fables</string>
+    <string name="action_search">Search</string>
+    <string name="search_hint">Search for fables</string>
+
+    <color name="title_bg">#0099CC</color>
+    <color name="title_fg">#FFFFFF</color>
+
+</resources>
