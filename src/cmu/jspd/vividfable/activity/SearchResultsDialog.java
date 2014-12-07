@@ -40,7 +40,6 @@ public class SearchResultsDialog extends ListActivity {
 		intent.putExtra(TextFableActivity.FABLE_LINK, links.get(position));
 		intent.putExtra(TextFableActivity.FABLE_TITLE, titles.get(position));
 		
-		
 		startActivity(intent);
 		finish();
 	}

@@ -32,7 +32,7 @@ public class TextFableActivity extends Activity {
 
 	public static final String ACTION_FETCH_LINK = "ACTION_FETCH_LINK";
 	
-	private TextToSpeech tts;
+	private TextToSpeech textToSpeech;
 	private TextView titleView;
 	private TextView textView;
 	private RatingBar fableRatingBar;
@@ -91,7 +91,7 @@ public class TextFableActivity extends Activity {
 		
 		textView.setText("");
 		
-		tts = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
+		textToSpeech = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
 			
 			private static final String TAG = "TextToSpeech";
 			
@@ -99,13 +99,26 @@ public class TextFableActivity extends Activity {
 			public void onInit(int status) {
 				if (status == TextToSpeech.SUCCESS) {
 					
-					int result = getResources().getConfiguration().locale.getLanguage().equals("zh") ? tts.setLanguage(Locale.CHINESE) : tts.setLanguage(Locale.US);
+					//Default Language: English, Other Language: Chinese
+					int result = getResources().getConfiguration().locale.getLanguage().equals("zh") ? 
+							textToSpeech.setLanguage(Locale.CHINESE) : textToSpeech.setLanguage(Locale.US);
+					
 					if (result == TextToSpeech.LANG_MISSING_DATA
 							|| result == TextToSpeech.LANG_NOT_SUPPORTED) {
 						Log.w(TAG,
 								"This Language is not supported for TTS");
+						
 					} else {
 						Log.d(TAG, "TTS initialization succeeded.");
+						
+						if(textView.getText().toString().length() > 0 &&
+								TextToSpeech.SUCCESS == textToSpeech.speak(textView.getText().toString(), TextToSpeech.QUEUE_FLUSH, null)) {
+							
+						} else if (textView.getText().toString().length() == 0){
+							//DO nothing
+						} else {
+							Toast.makeText(TextFableActivity.this, "Failed to load audio, please check your Internet...", Toast.LENGTH_LONG).show();
+						}
 					}
 				} else {
 					Log.e(TAG, "TTS Initilization Failed!");
@@ -120,7 +133,7 @@ public class TextFableActivity extends Activity {
 			String link = intent.getStringExtra(FABLE_LINK);
 			String title = intent.getStringExtra(FABLE_TITLE);
 			titleView.setText(title);
-			new FetchFableTask(this, titleView, textView, tts, fableRatingBar).execute(link);
+			new FetchFableTask(this, titleView, textView, textToSpeech, fableRatingBar).execute(link);
 		} else {											//Fetch the fable locally
 
 			titleView.setText(intent.getStringExtra(FABLE_TITLE));
@@ -129,15 +142,15 @@ public class TextFableActivity extends Activity {
 			
 			fableId = intent.getLongExtra(FABLE_ID, Long.MAX_VALUE);
 			
-			
 		}
 	}
+	
 
 	@Override
 	public void onDestroy() {
-		if (tts != null) {
-			tts.stop();
-			tts.shutdown();
+		if (textToSpeech != null) {
+			textToSpeech.stop();
+			textToSpeech.shutdown();
 		}
 		super.onDestroy();
 	}
